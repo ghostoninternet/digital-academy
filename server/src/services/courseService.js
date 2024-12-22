@@ -210,15 +210,9 @@ const getInstructorCourses = async (instructorId, limit = 10, page = 1) => {
 }
 
 const getInstructorCourseDetail = async (courseId) => {
-  if (!mongoose.Types.ObjectId.isValid(courseId)) {
-    const course = await courseDaos.findCourseBySlug({ courseSlug: courseId });
-    if (!course) {
-      throw new CustomError.BadRequestError("Invalid course ID or slug");
-    }
-    courseId = course._id; // Chuyển đổi slug thành ObjectId
-  }
-  const foundCourse = await courseDaos.findCourseById(courseId);
-  if (!foundCourse) throw new CustomError.NotFoundError("No course found!");
+  const foundCourse = await courseDaos.findCourseById(courseId)
+  if (!foundCourse) throw new CustomError.NotFoundError("No course found!")
+
   const transformedCourse = foundCourse.toObject()
   const categories = []
   for (let i = 0; i < transformedCourse.courseCategory.length; i++) {

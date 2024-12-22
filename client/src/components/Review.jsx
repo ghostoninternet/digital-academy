@@ -8,7 +8,7 @@ import deleteCourseReview from "../apis/review/deleteCourseReview";
 import updateCourseReview from "../apis/review/updateCourseReview";
 import getCourseDetail from "../apis/course/getCourseDetail";
 
-const Review = ({ avatarUrl, username, reviewContent, createdAt, star, reviewId, onDelete, onUpdate, courseSlug, setCourseDetail }) => { // Add courseSlug and setCourseDetail props
+const Review = ({ avatarUrl, username, reviewContent, createdAt, star, reviewId, onDelete, onUpdate, courseId, setCourseDetail }) => { 
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(reviewContent);
   const [editedStar, setEditedStar] = useState(star);
@@ -35,7 +35,7 @@ const Review = ({ avatarUrl, username, reviewContent, createdAt, star, reviewId,
       alert("Review updated successfully!"); // Success notification
 
       // Fetch updated course details to update courseRatingAvg
-      const updatedCourseDetails = await getCourseDetail(courseSlug);
+      const updatedCourseDetails = await getCourseDetail(courseId);
       setCourseDetail(updatedCourseDetails);
     } catch (error) {
       console.error("Error updating review:", error);
@@ -117,7 +117,7 @@ Review.propTypes = {
   reviewId: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
-  courseSlug: PropTypes.string.isRequired, 
+  courseId: PropTypes.string.isRequired, 
   setCourseDetail: PropTypes.func.isRequired, 
 };
 

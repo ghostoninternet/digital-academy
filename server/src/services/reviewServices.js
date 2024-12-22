@@ -143,7 +143,7 @@ const updateCourseReview = async (reviewId, userId, updateCourseReviewData) => {
     throw new CustomError.NotFoundError("No review found!");
   }
 
-  //Check ownership
+  // Check ownership
   if (!foundReview.userId.equals(userId)) {
     throw new CustomError.ForbiddenError("You are not authorized to edit this review!");
   }
@@ -206,31 +206,9 @@ const deleteCourseReview = async (reviewId, userId) => {
 
   // Delete review
   await reviewDaos.deleteCourseReview(reviewId);
-
-  // Recalculate rating average and update number of reviews
+  foundCourse.courseReviewCount -= 1;
+  await courseDaos.updateCourse(foundCourse._id, { courseReviewCount: foundCourse.courseReviewCount });
   await recalculateRatingAvg(foundCourse._id, foundCourse);
-  foundCourse.courseReviewCount -= 1;
-  await courseDaos.updateCourse(foundCourse._id, {
-    courseReviewCount: foundCourse.courseReviewCount,
-  })
-  recalculateRatingAvg(foundCourse._id, foundCourse);
-  foundCourse.courseReviewCount -= 1;
-  courseDaos.updateCourse(foundCourse._id, {
-    courseReviewCount: foundCourse.courseReviewCount,
-  });
-
-  // Recalculate rating average and update number of reviews
-  recalculateRatingAvg(foundCourse._id, foundCourse);
-  foundCourse.courseReviewCount -= 1;
-  courseDaos.updateCourse(foundCourse._id, {
-    courseReviewCount: foundCourse.courseReviewCount,
-  });
-  await recalculateRatingAvg(foundCourse._id, foundCourse)
-  foundCourse.courseReviewCount -= 1
-  await courseDaos.updateCourse(foundCourse._id, {
-    courseReviewCount: foundCourse.courseReviewCount
-  })
-
   return true;
 };
 
